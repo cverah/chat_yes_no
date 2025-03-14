@@ -1,4 +1,5 @@
 import 'package:chat_app/domain/entity/message.dart';
+import 'package:chat_app/helpers/get_yes_no_answer.dart';
 import 'package:flutter/material.dart';
 
 class ChatProvider extends ChangeNotifier {
@@ -6,12 +7,15 @@ class ChatProvider extends ChangeNotifier {
   //List en dart es cun array solo que tiene el nombre de List en vez de array
   //lista de la clase Message o en español seria message es una variable de arreglo de la Clase Message
   List<Message> messageList = [
-    Message(text: "Hola buen dia", fromWho: FromWho.incommingMessage),
-    Message(text: "estas bien", fromWho: FromWho.incommingMessage),
+    // Message(text: "Hola buen dia", fromWho: FromWho.incommingMessage),
+    // Message(text: "estas bien", fromWho: FromWho.incommingMessage),
   ];
 
   //controlador de scroll del ListView sera de tipo ScrollController
   final ScrollController chatScrollController = ScrollController();
+
+  //instanciar la clase GetYesNoAnswer
+  final GetYesNoAnswer getYesNoAnswer = GetYesNoAnswer();
 
   //método para enviar Message
   //Future tipo de dato para una función que es para peticiones asíncronas
@@ -19,6 +23,11 @@ class ChatProvider extends ChangeNotifier {
   Future<void> sendMessage(String text) async {
     //validación de mensajes vacíos
     if (text.isEmpty) return;
+
+    //para verificar si el mensaje es un pregunta
+    if (text.endsWith("?")) {
+      sendReply();
+    }
 
     //ingresara un nuevo mensaje como escribir desde la caja de texto el mensaje es mio
     final newMessage = Message(text: text, fromWho: FromWho.incommingMessage);
@@ -32,7 +41,7 @@ class ChatProvider extends ChangeNotifier {
   }
 
   Future<void> moveScrollController() async {
-    //tiempo de espera para que luego mueva el scrroll
+    //tiempo de espera para que luego mueva el scroll
     await Future.delayed(const Duration(milliseconds: 100));
 
     //usaremos la propiedad animateTo
@@ -45,5 +54,16 @@ class ChatProvider extends ChangeNotifier {
         //curve es el tipo de animación que queremos cunado se mueva el scroll
         //curves.easeOut es una animación
         curve: Curves.easeOut);
+  }
+
+  Future<void> sendReply() async {
+    // llamamos al método
+    final replyMessage = await getYesNoAnswer.getAnswer();
+    //agregamos al ListView
+    messageList.add(replyMessage);
+    //notificamos los cambios
+    notifyListeners();
+    //método para que se baje el scroll hasta abajo en el ListView
+    moveScrollController();
   }
 }

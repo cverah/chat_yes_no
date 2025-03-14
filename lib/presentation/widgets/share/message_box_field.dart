@@ -40,7 +40,7 @@ class MessageBoxField extends StatelessWidget {
       enabledBorder: outlineInputBorder,
       focusedBorder: outlineInputBorder,
       //como un place holder
-      hintText: 'Escribe un mensaje...',
+      hintText: 'Escribe un mensaje que termine con "?"',
     );
 
     return Column(

@@ -64,7 +64,8 @@ class _ChatView extends StatelessWidget {
                     //estoy en el item del array y quiero comparar el mensaje si es enviado o es la respuesta
                     return message.fromWho == FromWho.incommingMessage
                         ? MyMessageBubble(message: message.text)
-                        : const HerMessageBubble();
+                        : HerMessageBubble(
+                            message: message.text, imageURL: message.imageURL);
                   }),
             ),
 

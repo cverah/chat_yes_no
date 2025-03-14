@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class HerMessageBubble extends StatelessWidget {
-  const HerMessageBubble({super.key});
+  final String message;
+  final String? imageURL;
+  const HerMessageBubble({super.key, required this.message, this.imageURL});
 
   @override
   Widget build(BuildContext context) {
@@ -13,11 +15,11 @@ class HerMessageBubble extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
               color: color.secondary, borderRadius: BorderRadius.circular(8)),
-          child: const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
             child: Text(
-              "mi mensaje",
-              style: TextStyle(color: Colors.white),
+              message,
+              style: const TextStyle(color: Colors.white),
             ),
           ),
         ),
@@ -26,8 +28,7 @@ class HerMessageBubble extends StatelessWidget {
           height: 5,
         ),
         //TODO IMAGE
-        _ImageNetwork(),
-
+        _ImageNetwork(imageURL!),
         const SizedBox(
           height: 15,
         )
@@ -37,18 +38,21 @@ class HerMessageBubble extends StatelessWidget {
 }
 
 class _ImageNetwork extends StatelessWidget {
+  final String imageURL;
+
+  const _ImageNetwork(this.imageURL);
+
   @override
   Widget build(BuildContext context) {
     //sacar las dimensiones del dispositivo Movil
     final size = MediaQuery.of(context).size;
-    print("dimensiones del dispositivo móvil $size");
+    //print("dimensiones del dispositivo móvil $size");
 
     return ClipRRect(
       //bored redondeando en imagen
       borderRadius: BorderRadius.circular(8),
-      child: Image.network(
-          "https://yesno.wtf/assets/no/32-b62f1f8058c1d7f06c528319faccfb38.gif",
-          //danado el 70% del total de la dimension
+      child: Image.network(imageURL,
+          //ocupar el 70% del total de la dimension
           width: size.width * 0.7,
           height: 150,
           fit: BoxFit.cover,
